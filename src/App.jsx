@@ -1,30 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import { useAnimation } from 'framer-motion';
+import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 // Import semua sub-komponen yang rapi
 import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import About from './pages/About';
-import Skills from './pages/Skills';
-import Work from './pages/Work';
-import Contact from './pages/Contact';
+
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Skills = lazy(() => import('./pages/Skills'));
+const Work = lazy(() => import('./pages/Work'));
+const Contact = lazy(() => import('./pages/Contact'));
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const cursorRef = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const rocketControls = useAnimation();
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    const handlePointerMove = (event) => setCursorPosition({ x: event.clientX, y: event.clientY });
+    let frameId = 0;
+    let latestPosition = { x: 0, y: 0 };
+    const handlePointerMove = (event) => {
+      latestPosition = { x: event.clientX, y: event.clientY };
+      if (!frameId) {
+        frameId = window.requestAnimationFrame(() => {
+          if (cursorRef.current) {
+            cursorRef.current.style.left = `${latestPosition.x}px`;
+            cursorRef.current.style.top = `${latestPosition.y}px`;
+          }
+          frameId = 0;
+        });
+      }
+    };
     window.addEventListener('pointermove', handlePointerMove);
-    window.addEventListener('mousemove', handlePointerMove);
     return () => {
       window.removeEventListener('pointermove', handlePointerMove);
-      window.removeEventListener('mousemove', handlePointerMove);
+      window.cancelAnimationFrame(frameId);
     };
   }, []);
   
@@ -41,7 +52,7 @@ export default function App() {
   };
 
   return (
-    <div className={`${darkMode ? 'bg-[#20211f] text-[#f1eee7]' : 'bg-[#e9e5dc] text-[#171816]'} min-h-screen transition-colors duration-500 pb-12 overflow-x-hidden relative paper-surface ${location.pathname === '/' ? 'home-stage' : 'inner-stage'}`}>
+    <div className={`${darkMode ? 'theme-green bg-[#0f6f52] text-[#f1eee7]' : 'theme-light bg-white text-[#171816]'} min-h-screen transition-colors duration-500 pb-12 overflow-x-hidden relative paper-surface ${location.pathname === '/' ? 'home-stage' : 'inner-stage'}`}>
       <div className="paper-grain pointer-events-none absolute inset-0" />
       <div className="world-3d" aria-hidden="true">
         <span className="world-ring world-ring-one" />
@@ -54,20 +65,22 @@ export default function App() {
         <span className="stage-note">ideas<br />in motion</span>
         <span className="stage-pin" />
       </div>
-      <div className="bullet-cursor" style={{ left: `${cursorPosition.x}px`, top: `${cursorPosition.y}px` }} />
+      <div ref={cursorRef} className="bullet-cursor" aria-hidden="true" />
 
       <Navbar 
         darkMode={darkMode} setDarkMode={setDarkMode} 
         isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} 
       />
 
-      <Routes>
-        <Route path="/" element={<Home rocketControls={rocketControls} handleExploreClick={handleExploreClick} />} />
-        <Route path="/about" element={<About darkMode={darkMode} fadeInUpVariants={fadeInUpVariants} />} />
-        <Route path="/skills" element={<Skills darkMode={darkMode} fadeInUpVariants={fadeInUpVariants} />} />
-        <Route path="/work" element={<Work darkMode={darkMode} fadeInUpVariants={fadeInUpVariants} />} />
-        <Route path="/contact" element={<Contact fadeInUpVariants={fadeInUpVariants} />} />
-      </Routes>
+      <Suspense fallback={<main className="route-loading" aria-live="polite">Loading...</main>}>
+        <Routes>
+          <Route path="/" element={<Home handleExploreClick={handleExploreClick} />} />
+          <Route path="/about" element={<About darkMode={darkMode} fadeInUpVariants={fadeInUpVariants} />} />
+          <Route path="/skills" element={<Skills darkMode={darkMode} fadeInUpVariants={fadeInUpVariants} />} />
+          <Route path="/work" element={<Work darkMode={darkMode} fadeInUpVariants={fadeInUpVariants} />} />
+          <Route path="/contact" element={<Contact fadeInUpVariants={fadeInUpVariants} />} />
+        </Routes>
+      </Suspense>
 
       <footer className="site-footer relative mx-auto max-w-6xl px-6 py-10 sm:px-10">
         <div className="footer-inner">

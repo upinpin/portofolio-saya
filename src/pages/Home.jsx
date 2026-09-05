@@ -4,15 +4,15 @@ import { ArrowUpRight } from 'lucide-react';
 import Hero from '../components/Hero';
 
 const capabilities = [
-  ['01', 'Web products', 'Interface, backend, database, and deployment in one clear flow.'],
-  ['02', 'Automation', 'Turning repetitive routines into useful, reliable systems.'],
-  ['03', 'AI + GIS', 'Adding intelligence and location data when the project needs it.'],
+  ['01', 'Memahami masalah', 'Menggali kebutuhan pengguna dan menyusun solusi yang jelas sebelum mulai membangun.'],
+  ['02', 'Membangun solusi', 'Mengubah kebutuhan menjadi produk web, mobile, atau automation yang benar-benar bisa digunakan.'],
+  ['03', 'Memimpin kolaborasi', 'Sebagai Wakil Ketua ASTECH, saya terbiasa mengoordinasikan tim dan menjaga ide tetap bergerak menjadi aksi.'],
 ];
 
-export default function Home({ rocketControls, handleExploreClick }) {
+export default function Home({ handleExploreClick }) {
   return (
     <>
-      <Hero rocketControls={rocketControls} handleExploreClick={handleExploreClick} />
+      <Hero handleExploreClick={handleExploreClick} />
       <section className="mx-auto max-w-6xl px-6 py-20 sm:px-10">
         <div className="mb-10 flex items-end justify-between gap-6 border-b border-black/15 pb-4">
           <div>

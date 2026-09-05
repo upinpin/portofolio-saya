@@ -1,110 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowUpRight, Award, RotateCcw, Target } from 'lucide-react';
+import { ArrowUpRight, Award } from 'lucide-react';
 
 export default function Proyek({ darkMode, fadeInUpVariants }) {
-  const boardRef = useRef(null);
-  const playerRef = useRef({ top: 50, left: 50 });
-  const [gameStarted, setGameStarted] = useState(false);
-  const [gameFinished, setGameFinished] = useState(false);
-  const [score, setScore] = useState(0);
-  const [kills, setKills] = useState(0);
-  const [ammo, setAmmo] = useState(8);
-  const [shot, setShot] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(30);
-  const [player, setPlayer] = useState({ top: 50, left: 50 });
-  const [hazards, setHazards] = useState([]);
-  const [bonus, setBonus] = useState({ top: 25, left: 75, visible: true });
-
-  useEffect(() => {
-    if (!gameStarted || gameFinished) return undefined;
-    const timer = window.setInterval(() => {
-      setTimeLeft((currentTime) => {
-        if (currentTime <= 1) {
-          setGameFinished(true);
-          setGameStarted(false);
-          return 0;
-        }
-        return currentTime - 1;
-      });
-      setScore((currentScore) => currentScore + 1);
-    }, 1000);
-    return () => window.clearInterval(timer);
-  }, [gameStarted, gameFinished]);
-
-  useEffect(() => {
-    if (!gameStarted || gameFinished) return undefined;
-    const motionLoop = window.setInterval(() => {
-      setHazards((currentHazards) => {
-        const nextHazards = currentHazards.map((hazard) => {
-          const next = { ...hazard, top: hazard.top + hazard.velocityY, left: hazard.left + hazard.velocityX };
-          if (next.top < 5 || next.top > 92) next.velocityY *= -1;
-          if (next.left < 5 || next.left > 92) next.velocityX *= -1;
-          return next;
-        });
-        const hit = nextHazards.some((hazard) => Math.hypot(hazard.top - playerRef.current.top, hazard.left - playerRef.current.left) < 9);
-        if (hit) {
-          setGameFinished(true);
-          setGameStarted(false);
-        }
-        return nextHazards;
-      });
-    }, 90);
-    return () => window.clearInterval(motionLoop);
-  }, [gameStarted, gameFinished]);
-
-  const startGame = () => {
-    setScore(0);
-    setKills(0);
-    setAmmo(8);
-    setShot(null);
-    setTimeLeft(30);
-    setPlayer({ top: 50, left: 50 });
-    playerRef.current = { top: 50, left: 50 };
-    setHazards([
-      { top: 18, left: 18, velocityX: 0.34, velocityY: 0.25, color: 'red' },
-      { top: 78, left: 72, velocityX: -0.28, velocityY: 0.34, color: 'ochre' },
-      { top: 64, left: 30, velocityX: 0.4, velocityY: -0.2, color: 'red' },
-    ]);
-    setBonus({ top: 25, left: 75, visible: true });
-    setGameFinished(false);
-    setGameStarted(true);
-  };
-  const shootAt = (event) => {
-    if (!gameStarted || !boardRef.current || ammo <= 0) return;
-    const bounds = boardRef.current.getBoundingClientRect();
-    const shot = {
-      top: ((event.clientY - bounds.top) / bounds.height) * 100,
-      left: ((event.clientX - bounds.left) / bounds.width) * 100,
-    };
-    setShot(shot);
-    window.setTimeout(() => setShot(null), 180);
-    const hitIndex = hazards.findIndex((hazard) => Math.hypot(hazard.top - shot.top, hazard.left - shot.left) < 12);
-    setAmmo((currentAmmo) => currentAmmo - 1);
-    if (hitIndex >= 0) {
-      setHazards((currentHazards) => currentHazards.filter((_, index) => index !== hitIndex));
-      setKills((currentKills) => currentKills + 1);
-      setScore((currentScore) => currentScore + 20);
-    }
-  };
-  const reload = () => setAmmo(8);
-  const movePlayer = (event) => {
-    if (!gameStarted || !boardRef.current) return;
-    const bounds = boardRef.current.getBoundingClientRect();
-    const nextPlayer = {
-      top: Math.min(Math.max(((event.clientY - bounds.top) / bounds.height) * 100, 7), 93),
-      left: Math.min(Math.max(((event.clientX - bounds.left) / bounds.width) * 100, 7), 93),
-    };
-    playerRef.current = nextPlayer;
-    setPlayer(nextPlayer);
-    if (bonus.visible && Math.hypot(nextPlayer.top - bonus.top, nextPlayer.left - bonus.left) < 9) {
-      setTimeLeft((currentTime) => currentTime + 5);
-      setScore((currentScore) => currentScore + 25);
-      setBonus((currentBonus) => ({ ...currentBonus, visible: false }));
-      window.setTimeout(() => setBonus({ top: 12 + Math.random() * 76, left: 12 + Math.random() * 76, visible: true }), 2500);
-    }
-  };
-
   return (
     <motion.section 
       id="proyek" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUpVariants}
@@ -178,41 +76,6 @@ export default function Proyek({ darkMode, fadeInUpVariants }) {
             <p className="text-xs text-slate-400 leading-relaxed">
               Pemenang ke-2 dalam Kompetisi Desain Inovasi Aplikasi Manajemen Delegasi Tugas Karyawan Perusahaan.
             </p>
-          </div>
-        </motion.div>
-
-        {/* MINI GAME: GRAFFITI SURVIVAL */}
-        <motion.div 
-          whileHover={{ scale: 1.01 }}
-          className={`p-6 md:col-span-3 rounded-2xl border flex flex-col lg:flex-row items-stretch justify-between gap-8 transition-all ${darkMode ? 'bg-gradient-to-tr from-slate-900 via-slate-900 to-blue-950/20 border-blue-500/30 shadow-xl' : 'bg-blue-50/40 border-blue-200 shadow-md'}`}
-        >
-          {/* Sisi Kiri Game */}
-          <div className="flex-1 flex flex-col justify-between space-y-4">
-            <div className="space-y-2">
-              <span className="text-[10px] bg-[#e4572e] text-white font-mono font-bold tracking-widest uppercase px-2.5 py-1 rounded-md">Mini game</span>
-              <h3 className="text-xl font-black text-white pt-1">Graffiti Survival</h3>
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Gerakkan tag, arahkan pointer, lalu klik untuk menembak musuh. Hindari tabrakan dan isi ulang peluru saat perlu.
-              </p>
-            </div>
-            
-            {/* Skor Sementara */}
-            <div className="game-stats text-xs font-mono px-3 py-2 w-fit">
-              Waktu: <span className="text-[#e4572e] font-bold">{timeLeft}s</span> | Skor: <span className="text-[#2f7f82] font-bold">{score}</span> | Kill: <span className="text-[#c48745] font-bold">{kills}</span> | Peluru: <span className="text-[#e4572e] font-bold">{ammo}</span>
-            </div>
-          </div>
-
-          <div ref={boardRef} className="graffiti-game-board" onPointerMove={movePlayer} onPointerDown={shootAt}>
-            {!gameStarted && !gameFinished && <div className="game-intro"><Target size={30} /><span>Siap bertahan?</span><button onClick={startGame}>Mulai</button></div>}
-            {gameFinished && <div className="game-intro"><Award size={30} /><span>Tag tertabrak. Skor: {score}</span><button onClick={startGame}><RotateCcw size={14} /> Main lagi</button></div>}
-            {gameStarted && <>
-              <motion.div className="survival-player" animate={{ top: `${player.top}%`, left: `${player.left}%` }} transition={{ type: 'spring', stiffness: 420, damping: 28 }}><span className="player-head" /><span className="player-body">G</span><span className="player-arm" /><span className="player-blaster" /></motion.div>
-              {shot && <motion.span className="bullet-trail" initial={{ top: `${player.top}%`, left: `${player.left}%`, opacity: 1 }} animate={{ top: `${shot.top}%`, left: `${shot.left}%`, opacity: 0 }} transition={{ duration: 0.18, ease: 'easeOut' }} />}
-              {hazards.map((hazard, index) => <motion.div key={index} className={`survival-hazard ${hazard.color}`} animate={{ top: `${hazard.top}%`, left: `${hazard.left}%` }} transition={{ duration: 0.09, ease: 'linear' }}><span className="enemy-eye enemy-eye-one" /><span className="enemy-eye enemy-eye-two" /><b>!</b></motion.div>)}
-              {bonus.visible && <motion.button aria-label="Bonus waktu" className="survival-bonus" style={{ top: `${bonus.top}%`, left: `${bonus.left}%` }} animate={{ rotate: [0, 90, 180], scale: [0.9, 1.1, 0.9] }} transition={{ repeat: Infinity, duration: 2 }}><span>+</span></motion.button>}
-              <button className="reload-button" onClick={(event) => { event.stopPropagation(); reload(); }}>RELOAD</button>
-              <span className="survival-help">MOVE / AIM / FIRE</span>
-            </>}
           </div>
         </motion.div>
 

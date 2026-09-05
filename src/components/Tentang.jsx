@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-export default function Tentang({ darkMode, fadeInUpVariants }) {
+export default function Tentang({ fadeInUpVariants }) {
   return (
     <motion.section 
       id="tentang" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUpVariants}
@@ -15,16 +15,19 @@ export default function Tentang({ darkMode, fadeInUpVariants }) {
         <p>
           Saya selalu menerapkan alur kerja modern berbasis Git & <strong className="text-[#e4572e] font-semibold">GitHub</strong> di setiap proyek demi menjaga kolaborasi kode yang rapi, transparan, dan terukur.
         </p>
+        <p>
+          Di luar pengembangan teknis, saya aktif berorganisasi sebagai <strong className="text-[#e4572e] font-semibold">Wakil Ketua Himpunan Mahasiswa Teknologi Rekayasa Perangkat Lunak (ASTECH)</strong>. Pengalaman ini mengasah kemampuan saya dalam memimpin, berkomunikasi, dan mengoordinasikan program kerja bersama tim.
+        </p>
       </div>
       <div className="about-snapshot">
         <div className="about-stat about-stat-stick"><i className="about-stick" /><strong>TRPL</strong><span>Politeknik Negeri Lampung</span></div>
         <div className="about-stat about-stat-cube"><i className="about-cube" /><strong>WEB + MOBILE</strong><span>Produk yang bisa dipakai, bukan hanya dilihat</span></div>
-        <div className="about-stat about-stat-ring"><i className="about-ring" /><strong>GIT / GITHUB</strong><span>Alur kerja rapi dan kolaboratif</span></div>
+        <div className="about-stat about-stat-ring"><i className="about-ring" /><strong>ASTECH</strong><span>Wakil Ketua himpunan mahasiswa TRPL</span></div>
       </div>
       <div className="about-timeline">
-        <div><span>01</span><strong>Belajar</strong><p>Menguatkan fondasi rekayasa perangkat lunak, UI, dan database.</p></div>
-        <div><span>02</span><strong>Membangun</strong><p>Mengubah ide menjadi aplikasi web dan mobile yang nyata.</p></div>
-        <div><span>03</span><strong>Mengembangkan</strong><p>Menambahkan automation, AI, dan GIS ketika masalah membutuhkannya.</p></div>
+        <div><span>01</span><strong>Memahami</strong><p>Menguatkan fondasi rekayasa perangkat lunak sambil memahami kebutuhan pengguna.</p></div>
+        <div><span>02</span><strong>Membangun</strong><p>Mengubah masalah dan ide menjadi aplikasi web atau mobile yang nyata.</p></div>
+        <div><span>03</span><strong>Memimpin</strong><p>Mengoordinasikan tim dan program kerja melalui pengalaman di ASTECH.</p></div>
       </div>
     </motion.section>
   );

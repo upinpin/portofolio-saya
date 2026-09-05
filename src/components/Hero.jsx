@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import fotoGede from '../assets/foto-gede.jpg';
 
-export default function Hero({ rocketControls, handleExploreClick }) {
+export default function Hero({ handleExploreClick }) {
   const boardRef = useRef(null);
   const [runnerX, setRunnerX] = useState(0);
   const [isChasing, setIsChasing] = useState(false);
@@ -59,12 +60,12 @@ export default function Hero({ rocketControls, handleExploreClick }) {
             className="hero-cta hero-cta-primary group flex items-center gap-3 bg-[#e4572e] px-6 py-3.5 text-sm font-extrabold text-[#fff8f3] transition-transform hover:-translate-y-1"
           >
             <span><small>01 / ABOUT</small>Mulai jelajahi</span>
-            <motion.div animate={rocketControls}><ArrowUpRight size={18} /></motion.div>
+            <ArrowUpRight size={18} />
           </motion.button>
-          <a href="/work" className="hero-cta hero-cta-secondary flex items-center gap-3 px-5 py-3.5 text-sm font-semibold text-slate-700 transition-transform hover:-translate-y-1">
+          <Link to="/work" className="hero-cta hero-cta-secondary flex items-center gap-3 px-5 py-3.5 text-sm font-semibold text-slate-700 transition-transform hover:-translate-y-1">
             <span><small>02 / WORK</small>Lihat karya</span>
             <ArrowDown size={17} />
-          </a>
+          </Link>
         </div>
       </motion.div>
 
@@ -83,6 +84,7 @@ export default function Hero({ rocketControls, handleExploreClick }) {
             <img 
               src={fotoGede} 
               alt="I Gede Gaga Pratama" 
+              fetchPriority="high"
               className="h-full w-full object-cover object-center grayscale-[20%] transition-all duration-500 group-hover:scale-105 group-hover:grayscale-0"
             />
           </div>
