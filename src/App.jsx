@@ -1,17 +1,16 @@
-import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
-// Import semua sub-komponen yang rapi
+// Sub-komponen halaman
 import Navbar from './components/Navbar';
-
-const Home = lazy(() => import('./pages/Home'));
-const About = lazy(() => import('./pages/About'));
-const Skills = lazy(() => import('./pages/Skills'));
-const Work = lazy(() => import('./pages/Work'));
-const Contact = lazy(() => import('./pages/Contact'));
+import Home from './pages/Home';
+import About from './pages/About';
+import Skills from './pages/Skills';
+import Work from './pages/Work';
+import Contact from './pages/Contact';
 
 export default function App() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(false); // Default to signature warm paper craft, toggleable to emerald green
   const cursorRef = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -19,60 +18,73 @@ export default function App() {
 
   useEffect(() => {
     let frameId = 0;
-    let latestPosition = { x: 0, y: 0 };
+    let latestX = -100;
+    let latestY = -100;
+
     const handlePointerMove = (event) => {
-      latestPosition = { x: event.clientX, y: event.clientY };
+      latestX = event.clientX;
+      latestY = event.clientY;
       if (!frameId) {
         frameId = window.requestAnimationFrame(() => {
           if (cursorRef.current) {
-            cursorRef.current.style.left = `${latestPosition.x}px`;
-            cursorRef.current.style.top = `${latestPosition.y}px`;
+            cursorRef.current.style.transform = `translate3d(${latestX}px, ${latestY}px, 0)`;
           }
           frameId = 0;
         });
       }
     };
-    window.addEventListener('pointermove', handlePointerMove);
+
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
     return () => {
       window.removeEventListener('pointermove', handlePointerMove);
-      window.cancelAnimationFrame(frameId);
+      if (frameId) window.cancelAnimationFrame(frameId);
     };
   }, []);
-  
-  // Fungsi navigasi mulus saat tombol roket jelajahi di-klik
+
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location.pathname]);
+
   const handleExploreClick = (e) => {
     e.preventDefault();
     navigate('/about');
   };
 
-  // Varian animasi kemunculan section (fade-in-up)
   const fadeInUpVariants = {
-    hidden: { opacity: 0, y: 40 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+    hidden: { opacity: 0, y: 35 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
   };
 
   return (
-    <div className={`${darkMode ? 'theme-green bg-[#0f6f52] text-[#f1eee7]' : 'theme-light bg-white text-[#171816]'} min-h-screen transition-colors duration-500 pb-12 overflow-x-hidden relative paper-surface ${location.pathname === '/' ? 'home-stage' : 'inner-stage'}`}>
-      <div className="paper-grain pointer-events-none absolute inset-0" />
-      <div className="world-3d" aria-hidden="true">
-        <span className="world-ring world-ring-one" />
-        <span className="world-ring world-ring-two" />
-        <span className="world-block world-block-one" />
-        <span className="world-block world-block-two" />
-        <span className="stage-panel" />
-        <span className="stage-sticker stage-sticker-burst">2026</span>
-        <span className="stage-sticker stage-sticker-tag">CREATE<br />LOUD</span>
-        <span className="stage-note">ideas<br />in motion</span>
-        <span className="stage-pin" />
-      </div>
+    <div className={`${darkMode ? 'theme-green' : 'theme-light'} min-h-screen relative paper-surface pb-16 overflow-x-hidden`}>
+      {/* Tactile Craft Paper Grain Overlay */}
+      <div className="paper-grain" aria-hidden="true" />
+
+      {/* Stage Backdrop Elements (Home Stage Decoration) */}
+      {location.pathname === '/' && (
+        <div className="world-3d" aria-hidden="true">
+          <span className="stage-panel" />
+          <span className="stage-sticker-burst">2024</span>
+          <span className="stage-sticker-tag">CREATE<br />LOUD</span>
+          <span className="stage-note">ideas<br />in motion</span>
+          <span className="stage-pin" />
+        </div>
+      )}
+
+      {/* Micro Smooth Bullet Cursor Follower */}
       <div ref={cursorRef} className="bullet-cursor" aria-hidden="true" />
 
+      {/* Top Navbar */}
       <Navbar 
-        darkMode={darkMode} setDarkMode={setDarkMode} 
-        isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} 
+        darkMode={darkMode} 
+        setDarkMode={setDarkMode} 
+        isMenuOpen={isMenuOpen} 
+        setIsMenuOpen={setIsMenuOpen} 
       />
 
-      <Suspense fallback={<main className="route-loading" aria-live="polite">Loading...</main>}>
+      {/* Main Content Router */}
+      <main className="relative z-10">
         <Routes>
           <Route path="/" element={<Home handleExploreClick={handleExploreClick} />} />
           <Route path="/about" element={<About darkMode={darkMode} fadeInUpVariants={fadeInUpVariants} />} />
@@ -80,17 +92,22 @@ export default function App() {
           <Route path="/work" element={<Work darkMode={darkMode} fadeInUpVariants={fadeInUpVariants} />} />
           <Route path="/contact" element={<Contact fadeInUpVariants={fadeInUpVariants} />} />
         </Routes>
-      </Suspense>
+      </main>
 
-      <footer className="site-footer relative mx-auto max-w-6xl px-6 py-10 sm:px-10">
-        <div className="footer-inner">
-          <div>
-            <span className="footer-kicker">Portfolio / 2026</span>
-            <strong>I GEDE GAGA PRATAMA</strong>
+      {/* Signature Brutalist Editorial Footer */}
+      <footer className="relative z-10 mx-auto max-w-6xl px-6 pt-16 pb-12 sm:px-10 border-t-2 border-black/15 dark:border-white/15 mt-16">
+        <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 pb-6">
+          <div className="space-y-1">
+            <span className="font-mono text-[11px] uppercase tracking-widest text-[#e4572e] font-bold">
+              Portfolio / 2026
+            </span>
+            <h4 className="font-graffiti text-2xl sm:text-4xl text-inherit tracking-wide">
+              I GEDE GAGA PRATAMA
+            </h4>
           </div>
-          <div className="footer-meta">
-            <span>Web · Mobile · Creative Tech</span>
-            <span>© {new Date().getFullYear()}</span>
+          <div className="text-left sm:text-right font-mono text-xs text-slate-500 space-y-1">
+            <div>Web · Mobile · Creative Tech</div>
+            <div className="text-[#e4572e] font-bold">© {new Date().getFullYear()} All Rights Reserved.</div>
           </div>
         </div>
       </footer>

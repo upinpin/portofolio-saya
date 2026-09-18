@@ -1,70 +1,143 @@
 import React from 'react';
 import { Sun, Moon, Menu, X, User, Cpu, Briefcase, MessageSquare } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { GithubIcon, LinkedinIcon, InstagramIcon } from './SocialIcons';
 
 export default function Navbar({ darkMode, setDarkMode, isMenuOpen, setIsMenuOpen }) {
+  const location = useLocation();
+
+  const navLinks = [
+    { name: 'About', path: '/about', number: '01' },
+    { name: 'Skills', path: '/skills', number: '02' },
+    { name: 'Work', path: '/work', number: '03' },
+    { name: 'Contact', path: '/contact', number: '04' },
+  ];
+
   return (
     <>
-      <nav className={`fixed left-0 right-0 top-0 z-50 mx-auto flex max-w-7xl items-center justify-between border-b px-6 py-5 backdrop-blur-xl sm:px-10 ${darkMode ? 'border-white/10 bg-[#0f6f52]/90' : 'border-black/10 bg-white/90'}`}>
-        <h1 className={`navbar-brand text-base font-extrabold tracking-tight ${darkMode ? 'text-[#e4572e]' : 'text-[#171816]'}`}>
-          GAGA <span className="font-mono text-xs font-normal text-slate-500">/ 2026</span>
-        </h1>
-        
-        {/* Desktop Menu */}
-        <div className="hidden items-center gap-5 text-xs font-semibold tracking-wide text-slate-400 md:flex">
-          <a href="https://github.com/IrfanSabrian" target="_blank" rel="noreferrer" className="transition-colors hover:text-[#e4572e]">GitHub</a>
-          <a href="https://www.linkedin.com/in/gede-gaga-311643388?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noreferrer" className="transition-colors hover:text-[#e4572e]">LinkedIn</a>
-          <a href="https://www.instagram.com/igede_gaga?igsi=ZjFycmttcmhrbDRq&utm_source=qr" target="_blank" rel="noreferrer" className="transition-colors hover:text-[#e4572e]">Instagram</a>
+      <nav className={`fixed left-0 right-0 top-0 z-50 mx-auto flex max-w-7xl items-center justify-between border-b-2 border-black/15 px-6 py-4 backdrop-blur-xl sm:px-10 transition-colors ${
+        darkMode ? 'bg-[#0c5640]/90 text-[#fbf9f4] border-white/10' : 'bg-[#faf8f4]/90 text-[#171816]'
+      }`}>
+        {/* Brand Logo */}
+        <Link to="/" className="flex items-center gap-2 group">
+          <span className="font-graffiti text-2xl sm:text-3xl tracking-wide text-inherit group-hover:text-[#e4572e] transition-colors">
+            GAGA
+          </span>
+          <span className="font-mono text-xs font-normal text-slate-500 bg-black/5 dark:bg-white/10 px-2 py-0.5 rounded-md">
+            / 2026
+          </span>
+        </Link>
 
-          <div className="h-5 w-[1px] bg-slate-700/40 mx-1" />
+        {/* Desktop Navigation Buttons */}
+        <div className="hidden items-center gap-2 text-xs font-mono font-bold tracking-wider uppercase md:flex">
+          <div className="flex items-center gap-2">
+            {navLinks.map((item) => {
+              const isActive = location.pathname === item.path;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`px-3 py-1.5 rounded-xl border-2 transition-all flex items-center gap-1.5 ${
+                    isActive
+                      ? 'bg-[#e4572e] text-white border-black dark:border-white shadow-[3px_3px_0px_#171816] -rotate-1 scale-105 font-extrabold'
+                      : 'bg-white/80 dark:bg-black/30 border-black/20 dark:border-white/20 text-inherit hover:border-black hover:shadow-[3px_3px_0px_#171816] hover:-translate-y-0.5'
+                  }`}
+                >
+                  <span className={`text-[10px] px-1 rounded font-bold ${isActive ? 'bg-black/25 text-white' : 'bg-black/10 dark:bg-white/10 text-slate-600 dark:text-slate-300'}`}>
+                    {item.number}
+                  </span>
+                  <span>{item.name}</span>
+                </Link>
+              );
+            })}
+          </div>
 
-          <button 
+          <div className="h-4 w-[1.5px] bg-black/20 dark:bg-white/20 mx-1" />
+
+          {/* Social Icons */}
+          <div className="flex items-center gap-2">
+            <a
+              href="https://github.com/IrfanSabrian"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="GitHub"
+              className="p-1.5 rounded-lg hover:text-[#e4572e] hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+            >
+              <GithubIcon size={16} />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/gede-gaga-311643388"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn"
+              className="p-1.5 rounded-lg hover:text-[#2f7f82] hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+            >
+              <LinkedinIcon size={16} />
+            </a>
+            <a
+              href="https://www.instagram.com/igede_gaga"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Instagram"
+              className="p-1.5 rounded-lg hover:text-[#e4572e] hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+            >
+              <InstagramIcon size={16} />
+            </a>
+          </div>
+
+          <div className="h-4 w-[1.5px] bg-black/20 dark:bg-white/20 mx-1" />
+
+          {/* Theme Switcher Button */}
+          <button
             onClick={() => setDarkMode(!darkMode)}
-            aria-label="Ganti tema"
-            className={`p-2 transition-all ${darkMode ? 'text-[#e4572e]' : 'text-slate-900'}`}
+            aria-label="Ganti tema warna"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full border-2 border-black/20 dark:border-white/20 bg-white/50 dark:bg-black/20 hover:scale-105 active:scale-95 transition-all text-xs font-mono"
+            title={darkMode ? 'Ubah ke Paper Craft White' : 'Ubah ke Emerald Green'}
           >
-            {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+            {darkMode ? <Sun size={15} className="text-amber-300" /> : <Moon size={15} className="text-[#2f7f82]" />}
+            <span className="hidden lg:inline">{darkMode ? 'Paper Mode' : 'Green Mode'}</span>
           </button>
         </div>
 
-        {/* Mobile Hamburger */}
-        <div className="flex md:hidden items-center gap-3">
-          <button 
+        {/* Mobile Hamburger & Theme Toggle */}
+        <div className="flex md:hidden items-center gap-2">
+          <button
             onClick={() => setDarkMode(!darkMode)}
             aria-label="Ganti tema"
-            className={`p-2 ${darkMode ? 'text-[#e4572e]' : 'text-slate-900'}`}
+            className="p-2 rounded-lg border border-black/20 dark:border-white/20"
           >
-            {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+            {darkMode ? <Sun size={17} className="text-amber-300" /> : <Moon size={17} />}
           </button>
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Buka menu" className="p-2 text-slate-400 hover:text-white">
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Menu"
+            className="p-2 rounded-lg border border-black/20 dark:border-white/20"
+          >
+            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
-      </nav>
-
-      <aside className="fixed bottom-8 left-6 top-1/2 z-40 hidden -translate-y-1/2 flex-col justify-center gap-5 border-l border-white/10 pl-4 text-[10px] font-mono uppercase tracking-[0.18em] text-slate-500 lg:flex">
-        <Link to="/about" className="transition-colors hover:text-[#e4572e]">01 / About</Link>
-        <Link to="/skills" className="transition-colors hover:text-[#e4572e]">02 / Skills</Link>
-        <Link to="/work" className="transition-colors hover:text-[#e4572e]">03 / Work</Link>
-        <Link to="/contact" className="transition-colors hover:text-[#e4572e]">04 / Contact</Link>
-      </aside>
-
-      <nav className="quick-nav" aria-label="Navigasi cepat">
-        <Link to="/" className="quick-nav-link">Home</Link>
-        <Link to="/about" className="quick-nav-link">About</Link>
-        <Link to="/skills" className="quick-nav-link">Skills</Link>
-        <Link to="/work" className="quick-nav-link">Work</Link>
-        <Link to="/contact" className="quick-nav-link">Contact</Link>
       </nav>
 
       {/* Mobile Drawer */}
       {isMenuOpen && (
-          <div className={`mobile-drawer fixed top-[65px] left-4 right-4 rounded-2xl z-40 p-6 flex flex-col gap-4 border border-slate-700/30 shadow-2xl md:hidden backdrop-blur-2xl ${darkMode ? 'bg-slate-950/95 text-white' : 'bg-white/95 text-slate-900'}`}>
-            <Link to="/about" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 py-2 border-b border-slate-500/10"><User size={18} /> Tentang Saya</Link>
-            <Link to="/skills" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 py-2 border-b border-slate-500/10"><Cpu size={18} /> Keahlian</Link>
-            <Link to="/work" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 py-2 border-b border-slate-500/10"><Briefcase size={18} /> Proyek</Link>
-            <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 py-2"><MessageSquare size={18} /> Kontak</Link>
+        <div className={`fixed top-20 inset-x-4 z-50 p-6 rounded-2xl border-2 border-black/20 shadow-2xl md:hidden backdrop-blur-2xl ${
+          darkMode ? 'bg-[#0f523e]/95 text-white' : 'bg-white/95 text-slate-900'
+        }`}>
+          <div className="flex flex-col gap-3 font-graffiti text-xl">
+            <Link to="/about" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 py-2 border-b border-black/10 dark:border-white/10">
+              <User size={18} className="text-[#e4572e]" /> 01 / Tentang Saya
+            </Link>
+            <Link to="/skills" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 py-2 border-b border-black/10 dark:border-white/10">
+              <Cpu size={18} className="text-[#2f7f82]" /> 02 / Keahlian
+            </Link>
+            <Link to="/work" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 py-2 border-b border-black/10 dark:border-white/10">
+              <Briefcase size={18} className="text-[#c48745]" /> 03 / Proyek
+            </Link>
+            <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 py-2">
+              <MessageSquare size={18} className="text-[#e4572e]" /> 04 / Kontak
+            </Link>
           </div>
+        </div>
       )}
     </>
   );
