@@ -31,7 +31,7 @@ export default function Tentang({ fadeInUpVariants }) {
           Saya selalu menerapkan alur kerja modern berbasis Git & <strong className="text-[#e4572e] font-bold">GitHub</strong> di setiap proyek demi menjaga kolaborasi kode yang rapi, transparan, dan terukur.
         </p>
         <p className="text-sm sm:text-base leading-relaxed text-slate-800 dark:text-slate-100 font-medium">
-          Di luar pengembangan teknis, saya aktif berorganisasi sebagai <strong className="text-[#e4572e] font-bold">Wakil Ketua Himpunan Mahasiswa Teknologi Rekayasa Perangkat Lunak (ASTECH)</strong>. Pengalaman ini mengasah kemampuan saya dalam memimpin, berkomunikasi, dan mengoordinasikan program kerja bersama tim.
+          Di luar pengembangan teknis, saya memiliki pengalaman kepemimpinan dan pernah menjabat sebagai <strong className="text-[#e4572e] font-bold">Wakil Ketua Himpunan Mahasiswa Program Studi Teknologi Rekayasa Perangkat Lunak (ASTECH)</strong>. Pengalaman ini mengasah kemampuan saya dalam memimpin, berkomunikasi, dan mengoordinasikan program kerja bersama tim.
         </p>
       </div>
 
@@ -63,7 +63,7 @@ export default function Tentang({ fadeInUpVariants }) {
           </div>
           <div>
             <strong className="font-graffiti text-2xl text-[#e4572e] block">ASTECH</strong>
-            <span className="text-xs font-mono text-slate-600 dark:text-slate-300">Wakil Ketua Himpunan Mahasiswa TRPL</span>
+            <span className="text-xs font-mono text-slate-600 dark:text-slate-300">Pernah Menjabat Wakil Ketua TRPL</span>
           </div>
         </div>
       </div>
@@ -92,7 +92,7 @@ export default function Tentang({ fadeInUpVariants }) {
             <span className="font-mono text-xs font-bold text-[#c48745]">FASE 03</span>
             <h4 className="font-graffiti text-xl text-inherit">Memimpin</h4>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-              Mengoordinasikan tim lintas divisi dan program kerja nyata melalui tanggung jawab kepemimpinan di ASTECH.
+              Mengoordinasikan tim lintas divisi dan program kerja nyata melalui pengalaman kepemimpinan saat menjabat di ASTECH.
             </p>
           </div>
         </div>

@@ -6,7 +6,7 @@ import Hero from '../components/Hero';
 const capabilities = [
   ['01', 'Memahami masalah', 'Menggali kebutuhan pengguna dan menyusun solusi yang jelas sebelum mulai membangun.'],
   ['02', 'Membangun solusi', 'Mengubah kebutuhan menjadi produk web, mobile Flutter, atau automasi yang benar-benar bisa digunakan.'],
-  ['03', 'Memimpin kolaborasi', 'Sebagai Wakil Ketua ASTECH, saya terbiasa mengoordinasikan tim dan menjaga ide tetap bergerak menjadi aksi.'],
+  ['03', 'Memimpin kolaborasi', 'Melalui pengalaman pernah menjabat Wakil Ketua ASTECH, saya terbiasa mengoordinasikan tim dan menjaga ide tetap bergerak menjadi aksi.'],
 ];
 
 export default function Home({ handleExploreClick }) {

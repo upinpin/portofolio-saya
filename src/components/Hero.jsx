@@ -146,7 +146,7 @@ export default function Hero({ handleExploreClick }) {
         {/* Editorial Subhead Callout */}
         <div className="p-4 sm:p-5 rounded-2xl border-2 border-black/20 dark:border-white/20 bg-amber-200/40 dark:bg-amber-500/15 backdrop-blur-md shadow-[4px_4px_0px_rgba(23,24,22,0.2)]">
           <p className="text-sm sm:text-base leading-relaxed font-medium text-slate-800 dark:text-slate-100">
-            Saya adalah mahasiswa <strong className="text-[#2f7f82] dark:text-[#70d085]">TRPL Politeknik Negeri Lampung</strong> & <strong className="text-[#e4572e]">Wakil Ketua ASTECH</strong> yang merangkai web modern, mobile Flutter, automasi, dan UI/UX menjadi pengalaman yang solutif.
+            Saya adalah mahasiswa <strong className="text-[#2f7f82] dark:text-[#70d085]">TRPL Politeknik Negeri Lampung</strong> yang pernah menjabat sebagai <strong className="text-[#e4572e]">Wakil Ketua ASTECH</strong>, merangkai web modern, mobile Flutter, automasi, dan UI/UX menjadi pengalaman yang solutif.
           </p>
         </div>
       </motion.div>
